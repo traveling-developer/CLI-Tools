@@ -1,0 +1,39 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "*/v*"
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # full history for changelog
+
+      - name: Extract tool and version from tag
+        id: tag
+        run: |
+          echo "tool=${GITHUB_REF_NAME%%/*}" >> $GITHUB_OUTPUT
+          echo "version=${GITHUB_REF_NAME#*/}" >> $GITHUB_OUTPUT
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: tools/${{ steps.tag.outputs.tool }}/go.mod
+
+      - name: Create local version tag for GoReleaser
+        run: git tag ${{ steps.tag.outputs.version }}
+
+      - uses: goreleaser/goreleaser-action@v6
+        with:
+          version: latest
+          args: release --clean
+          workdir: tools/${{ steps.tag.outputs.tool }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GORELEASER_CURRENT_TAG: ${{ steps.tag.outputs.version }}

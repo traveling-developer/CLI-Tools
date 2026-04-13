@@ -1,0 +1,26 @@
+# Binaries
+bin/
+dist/
+tools/unsplash/unsplash
+
+# Go
+vendor/
+*.test
+*.out
+coverage.html
+
+# Environment
+.env
+.env.*
+.envrc
+
+# GoReleaser
+dist/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+*.iml

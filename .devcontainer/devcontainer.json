@@ -1,0 +1,21 @@
+{
+	"name": "debian",
+	"image": "mcr.microsoft.com/devcontainers/base:debian",
+	"features": {
+		"ghcr.io/meaningful-ooo/devcontainer-features/fish:2": {},
+		"ghcr.io/devcontainers/features/git:1": {},
+		"ghcr.io/devcontainers/features/go:1": {}
+	},
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"mathematic.vscode-pdf",
+				"golang.go"
+			]
+		}
+	},
+	"remoteEnv": {
+		"PATH": "/home/vscode/.local/bin:${containerEnv:PATH}"
+	},
+	"postCreateCommand": "curl -fsSL https://claude.ai/install.sh | bash"
+}
