@@ -11,11 +11,11 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        tool: [unsplash]
+        tool: [unsplash, rss]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6.0.2
 
-      - uses: actions/setup-go@v5
+      - uses: actions/setup-go@v6.4.0
         with:
           go-version-file: tools/${{ matrix.tool }}/go.mod
 
