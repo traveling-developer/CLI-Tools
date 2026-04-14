@@ -2,6 +2,7 @@
 bin/
 dist/
 tools/unsplash/unsplash
+tools/rss/rss
 
 # Go
 vendor/
