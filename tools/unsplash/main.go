@@ -26,6 +26,8 @@ var validColors = map[string]bool{
 }
 
 func main() {
+	help := flag.Bool("help", false, "show this help message")
+	flag.BoolVar(help, "h", false, "shorthand for --help")
 	search := flag.String("search", "", "search query")
 	flag.StringVar(search, "s", "", "shorthand for --search")
 	apiKey := flag.String("api-key", "", "Unsplash API access key")
@@ -37,7 +39,42 @@ func main() {
 	contentFilter := flag.String("content-filter", "low", "content safety filter: low, high")
 	color := flag.String("color", "", "filter by color: black_and_white, black, white, yellow, orange, red, purple, magenta, green, teal, blue")
 	orientation := flag.String("orientation", "", "filter by orientation: landscape, portrait, squarish")
+
+	flag.Usage = func() {
+		fmt.Fprintf(os.Stderr, `Usage: unsplash --search <query> [options]
+
+Search for photos on Unsplash and print results to stdout.
+
+Options:
+  -s, --search <query>          Search query (required)
+  -k, --api-key <key>           Unsplash API access key
+                                (falls back to UNSPLASH_ACCESS_KEY env var)
+      --page <n>                Page number (default: 1)
+      --per-page <n>            Results per page, max 30 (default: 10)
+      --order-by <order>        Sort order: relevant, latest (default: relevant)
+      --collections <ids>       Filter by collection IDs (comma-separated)
+      --content-filter <level>  Content safety filter: low, high (default: low)
+      --color <color>           Filter by color:
+                                  black_and_white, black, white, yellow,
+                                  orange, red, purple, magenta, green,
+                                  teal, blue
+      --orientation <o>         Filter by orientation:
+                                  landscape, portrait, squarish
+  -h, --help                    Show this help message
+
+Examples:
+  unsplash --search "mountain sunset"
+  unsplash -s "cats" --per-page 5 --color black_and_white
+  unsplash -s "city" --order-by latest --orientation landscape
+`)
+	}
+
 	flag.Parse()
+
+	if *help {
+		flag.Usage()
+		os.Exit(0)
+	}
 
 	if *search == "" {
 		fmt.Fprintln(os.Stderr, "error: --search / -s is required")
