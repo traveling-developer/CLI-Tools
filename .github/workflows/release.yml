@@ -16,6 +16,18 @@ jobs:
         with:
           fetch-depth: 0  # full history for changelog
 
+      - name: Build defuddle binaries (all platforms)
+        run: |
+          docker build -t defuddle-build -f tools/web2md/defuddle/dockerfile .
+          docker create --name tmp defuddle-build
+          docker cp tmp:/output/defuddle-linux-x64        tools/web2md/defuddle/defuddle-linux-x64
+          docker cp tmp:/output/defuddle-linux-arm64      tools/web2md/defuddle/defuddle-linux-arm64
+          docker cp tmp:/output/defuddle-darwin-x64       tools/web2md/defuddle/defuddle-darwin-x64
+          docker cp tmp:/output/defuddle-darwin-arm64     tools/web2md/defuddle/defuddle-darwin-arm64
+          docker cp tmp:/output/defuddle-windows-x64.exe  tools/web2md/defuddle/defuddle-windows-x64.exe
+          docker rm tmp
+          docker rmi defuddle-build
+
       - uses: actions/setup-go@v6.4.0
         with:
           go-version-file: go.work

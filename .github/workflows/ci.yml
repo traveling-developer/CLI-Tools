@@ -26,3 +26,28 @@ jobs:
       - name: Test
         working-directory: tools/${{ matrix.tool }}
         run: go test ./...
+
+  build-web2md:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6.0.2
+
+      - name: Build defuddle binary (linux/amd64)
+        run: |
+          docker build -t defuddle-build -f tools/web2md/defuddle/dockerfile .
+          docker create --name tmp defuddle-build
+          docker cp tmp:/output/defuddle-linux-x64 tools/web2md/defuddle/defuddle-linux-x64
+          docker rm tmp
+          docker rmi defuddle-build
+
+      - uses: actions/setup-go@v6.4.0
+        with:
+          go-version-file: tools/web2md/go.mod
+
+      - name: Build
+        working-directory: tools/web2md
+        run: go build ./...
+
+      - name: Test
+        working-directory: tools/web2md
+        run: go test ./...

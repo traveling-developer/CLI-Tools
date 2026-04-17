@@ -3,4 +3,5 @@ go 1.26
 use (
 	./tools/unsplash
 	./tools/rss
+	./tools/web2md
 )

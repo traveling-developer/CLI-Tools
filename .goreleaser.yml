@@ -29,6 +29,23 @@ builds:
       - amd64
       - arm64
 
+  - id: web2md
+    main: .
+    dir: tools/web2md
+    binary: web2md
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - darwin
+      - windows
+    goarch:
+      - amd64
+      - arm64
+    ignore:
+      - goos: windows
+        goarch: arm64
+
 archives:
   - id: unsplash
     ids: [unsplash]
@@ -41,6 +58,15 @@ archives:
           - zip
   - id: rss
     ids: [rss]
+    formats:
+      - tar.gz
+    name_template: "{{ .Binary }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+    format_overrides:
+      - goos: windows
+        formats:
+          - zip
+  - id: web2md
+    ids: [web2md]
     formats:
       - tar.gz
     name_template: "{{ .Binary }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"

@@ -1,0 +1,17 @@
+# ============================================
+# Defuddle → Standalone Binary
+# ============================================
+FROM oven/bun:1
+
+WORKDIR /build
+
+RUN apt-get update && apt-get install -y git && \
+    git clone https://github.com/kepano/defuddle.git .
+
+RUN bun install
+RUN bun run build
+RUN bun build ./dist/cli.js --compile --target=bun-linux-x64 --outfile /output/defuddle-linux-x64
+RUN bun build ./dist/cli.js --compile --target=bun-linux-arm64 --outfile /output/defuddle-linux-arm64
+RUN bun build ./dist/cli.js --compile --target=bun-darwin-x64 --outfile /output/defuddle-darwin-x64
+RUN bun build ./dist/cli.js --compile --target=bun-darwin-arm64 --outfile /output/defuddle-darwin-arm64
+RUN bun build ./dist/cli.js --compile --target=bun-windows-x64 --outfile /output/defuddle-windows-x64

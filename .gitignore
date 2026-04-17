@@ -3,6 +3,14 @@ bin/
 dist/
 tools/unsplash/unsplash
 tools/rss/rss
+tools/web2md/web2md
+tools/web2md/binaries/defuddle-*
+tools/web2md/defuddle/defuddle-*
+tools/web2md/defuddle/defuddle-*.exe
+
+# Node/Bun
+node_modules/
+tools/web2md/defuddle/node_modules/
 
 # Go
 vendor/
